@@ -289,7 +289,8 @@ class Metro_Sitemap {
 	public static function get_post_year_range() {
 		global $wpdb;
 
-		$oldest_post_date_gmt = $wpdb->get_var( "SELECT post_date FROM $wpdb->posts WHERE post_status = 'publish' ORDER BY post_date ASC LIMIT 1" );
+		$oldest_post_date_gmt = $wpdb->get_var(
+				"SELECT post_date FROM $wpdb->posts WHERE post_status = 'publish' ORDER BY post_date ASC LIMIT 1" );
 		
 		if( null !== $oldest_post_date_gmt ) {
 			$oldest_post_year = date( 'Y', strtotime( $oldest_post_date_gmt ) );
@@ -343,7 +344,10 @@ class Metro_Sitemap {
 		$end_date .= ' 23:59:59';
 
 		$post_types_in = self::get_supported_post_types_in();
-		return $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_status = 'publish' AND post_date >= %s AND post_date <= %s AND post_type IN ( {$post_types_in} ) LIMIT 1", $start_date, $end_date ) );
+		return $wpdb->get_var( $wpdb->prepare(
+				"SELECT ID FROM $wpdb->posts WHERE post_status = 'publish' AND post_date >= %s AND post_date <= %s AND post_type IN ( {$post_types_in} ) LIMIT 1",
+				$start_date,
+				$end_date ) );
 	}
 
 	/**
@@ -360,7 +364,11 @@ class Metro_Sitemap {
 		$end_date = $sitemap_date . ' 23:59:59';
 		$post_types_in = self::get_supported_post_types_in();
 
-		return $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_status = 'publish' AND post_date >= %s AND post_date <= %s AND post_type IN ( {$post_types_in} ) ORDER BY post_date LIMIT %d", $start_date, $end_date, $limit ) );
+		return $wpdb->get_col( $wpdb->prepare(
+				"SELECT ID FROM $wpdb->posts WHERE post_status = 'publish' AND post_date >= %s AND post_date <= %s AND post_type IN ( {$post_types_in} ) ORDER BY post_date LIMIT %d",
+				$start_date,
+				$end_date,
+				$limit ) );
 	}
 
 	/**
@@ -384,7 +392,10 @@ class Metro_Sitemap {
 			'post_date' => $sitemap_date,
 			);
 
-		$sitemap_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_name = %s LIMIT 1", self::SITEMAP_CPT, $sitemap_name ) );
+		$sitemap_id = $wpdb->get_var( $wpdb->prepare(
+				"SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_name = %s LIMIT 1",
+				self::SITEMAP_CPT,
+				$sitemap_name ) );
 
 		if ( $sitemap_id ) {
 			$sitemap_exists = true;
@@ -554,7 +565,10 @@ class Metro_Sitemap {
 
 		$post_types_in = self::get_supported_post_types_in();
 
-		$modified_posts = $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_date FROM $wpdb->posts WHERE post_type IN ( {$post_types_in} ) AND post_modified_gmt >= %s LIMIT 1000", $date ) );
+		$modified_posts = $wpdb->get_results( $wpdb->prepare(
+				"SELECT ID, post_date FROM $wpdb->posts WHERE post_type IN ( {$post_types_in} ) AND post_modified_gmt >= %s LIMIT 1000",
+				$date ) );
+
 		return $modified_posts;
 	}
 
@@ -627,7 +641,10 @@ class Metro_Sitemap {
 		$xml_prefix = '<?xml version="1.0" encoding="utf-8"?>';
 		global $wpdb;
 		// Direct query because we just want dates of the sitemap entries and this is much faster than WP_Query
-		$sitemaps = $wpdb->get_col( $wpdb->prepare( "SELECT post_date FROM $wpdb->posts WHERE post_type = %s ORDER BY post_date DESC LIMIT 10000", Metro_Sitemap::SITEMAP_CPT ) );
+		$sitemaps = $wpdb->get_col(
+				$wpdb->prepare(
+						"SELECT post_date FROM $wpdb->posts WHERE post_type = %s ORDER BY post_date DESC LIMIT 10000",
+						Metro_Sitemap::SITEMAP_CPT ) );
 
 		$xml = new SimpleXMLElement( $xml_prefix . '<sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>' );
 		foreach ( $sitemaps as $sitemap_date ) {
