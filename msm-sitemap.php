@@ -297,7 +297,7 @@ class Metro_Sitemap {
 	}
 
 	public static function is_blog_public() {
-		return 1;//( 1 == get_option( 'blog_public' ) );
+		return ( 1 == get_option( 'blog_public' ) );
 	}
 
 	/**
