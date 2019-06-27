@@ -608,7 +608,7 @@ class Metro_Sitemap {
         }
 
         $post_types_in = self::get_supported_post_types_in();
-                $count_posts = $wpdb->get_var( "SELECT count(*) as total FROM $wpdb->posts WHERE post_type IN ( {$post_types_in} ) AND post_modified_gmt >= '".$date."' ");
+                $count_posts = $wpdb->get_var( $wpdb->prepare( "SELECT count(*) as total FROM $wpdb->posts WHERE post_type IN ( {$post_types_in} ) AND post_modified_gmt >= %s ", $date) );
 
                 if ( $count_posts > 1000 ) {
                     $count_posts = 1000;
